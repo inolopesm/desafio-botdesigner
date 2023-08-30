@@ -9,11 +9,12 @@ export class Repository {
     const baseUrl = "https://compras.api.portaldecompraspublicas.com.br";
     const url = new URL("/v2/licitacao/processos", baseUrl);
 
+    url.searchParams.set("pagina", "");
     url.searchParams.set("dataInicial", dataInicial.toISOString());
     url.searchParams.set("dataFinal", dataFinal.toISOString());
     url.searchParams.set("tipoData", "1");
 
-    let i = 0;
+    let i = 1;
     let max = 0;
     const result = [];
 
