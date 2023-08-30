@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx eslint src/**/*.mts
+npx prettier --check src/**/*.mts
+npx jest --ci --coverage --passWithNoTests --runInBand --coverageReporters=text
+npx tsc -p tsconfig.build.json --noEmit
