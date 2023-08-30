@@ -2,6 +2,10 @@ export class Repository {
   constructor(private readonly fetcher: (url: string) => any) {}
 
   async findProcessosByDataBetween(dataInicial: Date, dataFinal: Date) {
+    if (dataInicial.getTime() >= dataFinal.getTime()) {
+      throw new Error("dataInicial must be before dataFinal");
+    }
+
     const baseUrl = "https://compras.api.portaldecompraspublicas.com.br";
     const url = new URL("/v2/licitacao/processos", baseUrl);
 

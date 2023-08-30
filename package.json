@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.build.json",
-    "lint": "eslint --fix src/**/*.mts",
-    "format": "prettier -w src/**/*.mts",
+    "lint": "eslint --fix src/**/*.ts",
+    "format": "prettier -w src/**/*.ts",
     "test": "jest",
     "coverage": "jest --coverage",
     "prepare": "husky install"
@@ -12,6 +12,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
+    "@types/jest": "^29.5.4",
     "@types/node": "^18.17.12",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "eslint": "^8.48.0",
