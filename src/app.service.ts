@@ -4,8 +4,6 @@ import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.pr
 
 @Injectable()
 export class AppService {
-  constructor(private readonly provider: PortalDeComprasPublicasProvider) {}
-
   private static formatDate(date: Date) {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -13,15 +11,29 @@ export class AppService {
     return `${year}/${month}/${day}T03:00:00.000Z`;
   }
 
+  running = false;
+
+  constructor(private readonly provider: PortalDeComprasPublicasProvider) {}
+
   @Cron(CronExpression.EVERY_4_HOURS)
   async extract() {
+    if (this.running) {
+      throw new Error("Method extract is already running");
+    }
+
+    this.running = true;
+
     const actualDate = new Date();
     const threeDaysInMs = 3 * 24 * 60 * 60 * 1000;
     const threeDaysAheadDate = new Date(actualDate.getTime() + threeDaysInMs);
 
-    await this.provider.findProcessosByDataBetween(
-      AppService.formatDate(actualDate),
-      AppService.formatDate(threeDaysAheadDate)
-    );
+    try {
+      await this.provider.findProcessosByDataBetween(
+        AppService.formatDate(actualDate),
+        AppService.formatDate(threeDaysAheadDate)
+      );
+    } finally {
+      this.running = false;
+    }
   }
 }
