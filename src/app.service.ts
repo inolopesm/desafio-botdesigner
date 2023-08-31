@@ -17,10 +17,6 @@ export class AppService {
 
   @Cron(CronExpression.EVERY_4_HOURS)
   async extract() {
-    if (this.running) {
-      throw new Error("Method extract is already running");
-    }
-
     this.running = true;
 
     const actualDate = new Date();

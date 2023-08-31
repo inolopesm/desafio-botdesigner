@@ -9,7 +9,10 @@ export class AppController {
   @UseGuards(ApiKeyGuard)
   @Get("extraction/force")
   async forceExtraction() {
-    this.service.extract().catch(() => {});
+    if (!this.service.running) {
+      await this.service.extract();
+    }
+
     return { running: this.service.running };
   }
 
