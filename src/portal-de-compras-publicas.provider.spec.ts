@@ -1,11 +1,27 @@
-import { Repository } from "./repository";
+import { Test } from "@nestjs/testing";
+import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.provider";
 
-describe(Repository.name, () => {
-  describe(Repository.prototype.findProcessosByDataBetween.name, () => {
+describe("PortalDeComprasPublicasProvider", () => {
+  let provider: PortalDeComprasPublicasProvider;
+  let fetcher: (url: string) => any;
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        {
+          provide: PortalDeComprasPublicasProvider,
+          useFactory: () => new PortalDeComprasPublicasProvider(fetcher),
+        },
+      ],
+    }).compile();
+
+    provider = moduleRef.get(PortalDeComprasPublicasProvider);
+    fetcher = jest.fn((url) => ({ pageCount: 3, result: [url] }));
+  });
+
+  describe("findProcessosByDataBetween", () => {
     it("dataInicial must be before dataFinal", async () => {
-      const repository = new Repository(() => null);
-
-      const promise = repository.findProcessosByDataBetween(
+      const promise = provider.findProcessosByDataBetween(
         "2023-09-03T03:00:00.000Z",
         "2023-09-01T03:00:00.000Z"
       );
@@ -15,14 +31,7 @@ describe(Repository.name, () => {
     });
 
     it("should retrieve all pages of results when success", async () => {
-      const fetcher = jest.fn(async (url: string) => ({
-        pageCount: 3,
-        result: [url],
-      }));
-
-      const repository = new Repository(fetcher);
-
-      const result = await repository.findProcessosByDataBetween(
+      const result = await provider.findProcessosByDataBetween(
         "2023-09-01T03:00:00.000Z",
         "2023-09-03T03:00:00.000Z"
       );

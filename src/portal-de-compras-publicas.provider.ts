@@ -1,4 +1,7 @@
-export class Repository {
+import { Injectable } from "@nestjs/common";
+
+@Injectable()
+export class PortalDeComprasPublicasProvider {
   constructor(private readonly fetcher: (url: string) => any) {}
 
   async findProcessosByDataBetween(dataInicial: string, dataFinal: string) {
