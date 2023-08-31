@@ -1,8 +1,8 @@
 export class Repository {
   constructor(private readonly fetcher: (url: string) => any) {}
 
-  async findProcessosByDataBetween(dataInicial: Date, dataFinal: Date) {
-    if (dataInicial.getTime() >= dataFinal.getTime()) {
+  async findProcessosByDataBetween(dataInicial: string, dataFinal: string) {
+    if (dataInicial >= dataFinal) {
       throw new Error("dataInicial must be before dataFinal");
     }
 
@@ -10,8 +10,8 @@ export class Repository {
     const url = new URL("/v2/licitacao/processos", baseUrl);
 
     url.searchParams.set("pagina", "");
-    url.searchParams.set("dataInicial", dataInicial.toISOString());
-    url.searchParams.set("dataFinal", dataFinal.toISOString());
+    url.searchParams.set("dataInicial", dataInicial);
+    url.searchParams.set("dataFinal", dataFinal);
     url.searchParams.set("tipoData", "1");
 
     let i = 1;

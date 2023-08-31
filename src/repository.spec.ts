@@ -3,11 +3,13 @@ import { Repository } from "./repository";
 describe(Repository.name, () => {
   describe(Repository.prototype.findProcessosByDataBetween.name, () => {
     it("dataInicial must be before dataFinal", async () => {
-      const fetcher = jest.fn().mockResolvedValue({ pageCount: 1, result: [] });
-      const repository = new Repository(fetcher);
-      const inicial = new Date(2023, 9 - 1, 3);
-      const final = new Date(2023, 9 - 1, 1);
-      const promise = repository.findProcessosByDataBetween(inicial, final);
+      const repository = new Repository(() => null);
+
+      const promise = repository.findProcessosByDataBetween(
+        "2023-09-03T03:00:00.000Z",
+        "2023-09-01T03:00:00.000Z"
+      );
+
       const error = new Error("dataInicial must be before dataFinal");
       await expect(promise).rejects.toThrow(error);
     });
@@ -21,8 +23,8 @@ describe(Repository.name, () => {
       const repository = new Repository(fetcher);
 
       const result = await repository.findProcessosByDataBetween(
-        new Date(2023, 9 - 1, 1),
-        new Date(2023, 9 - 1, 3)
+        "2023-09-01T03:00:00.000Z",
+        "2023-09-03T03:00:00.000Z"
       );
 
       expect(result).toEqual([
