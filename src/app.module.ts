@@ -1,10 +1,12 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { ScheduleModule } from "@nestjs/schedule";
 import { AppController } from "./app.controller";
 import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.provider";
+import { AppService } from "./app.service";
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true })],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), ScheduleModule.forRoot()],
   controllers: [AppController],
   providers: [
     {
@@ -16,6 +18,7 @@ import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.pr
           return data;
         }),
     },
+    AppService,
   ],
 })
 export class AppModule {}
