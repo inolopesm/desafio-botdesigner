@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
 import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.provider";
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: PortalDeComprasPublicasProvider,
