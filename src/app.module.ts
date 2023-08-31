@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
-import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.provider";
+import { ConfigModule } from "@nestjs/config";
 import { AppController } from "./app.controller";
+import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.provider";
 
 @Module({
-  imports: [],
+  imports: [ConfigModule.forRoot({ isGlobal: true })],
   controllers: [AppController],
   providers: [
     {
