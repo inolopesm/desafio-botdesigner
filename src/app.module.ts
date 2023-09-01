@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
-import { KnexModule } from "./knex/knex.module";
-import { PortalDeComprasPublicasModule } from "./portal-de-compras-publicas/portal-de-compras-publicas.module";
+import { KnexModule } from "./knex";
+import { PortalDeComprasPublicasModule } from "./portal-de-compras-publicas";
+import { HealthModule } from "./health";
+import { ExtractionModule } from "./extraction";
 
 @Module({
   imports: [
@@ -17,8 +17,8 @@ import { PortalDeComprasPublicasModule } from "./portal-de-compras-publicas/port
       }),
     }),
     PortalDeComprasPublicasModule,
+    HealthModule,
+    ExtractionModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

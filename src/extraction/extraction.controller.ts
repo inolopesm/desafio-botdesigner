@@ -1,10 +1,10 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
-import { ApiKeyGuard } from "./api-key.guard";
-import { AppService } from "./app.service";
+import { ApiKeyGuard } from "../api-key.guard";
+import { ExtractionService } from "./extraction.service";
 
 @Controller({ version: "1" })
-export class AppController {
-  constructor(private readonly service: AppService) {}
+export class ExtractionController {
+  constructor(private readonly service: ExtractionService) {}
 
   @UseGuards(ApiKeyGuard)
   @Get("extraction/force")
@@ -19,10 +19,5 @@ export class AppController {
   async getExtractionStatus() {
     const running = this.service.getRunning();
     return { running };
-  }
-
-  @Get("health")
-  async health() {
-    return { message: "ok" };
   }
 }

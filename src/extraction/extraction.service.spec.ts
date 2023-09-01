@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing";
-import { AppService } from "./app.service";
-import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas";
-import { KnexProvider } from "./knex/knex.provider";
+import { ExtractionService } from "./extraction.service";
+import { PortalDeComprasPublicasProvider } from "../portal-de-compras-publicas";
+import { KnexProvider } from "../knex";
 
 const sleep = async (ms: number) => {
   await new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -33,8 +33,8 @@ const processo2 = {
   atualizadoEm: new Date(2023, 9 - 1, 1, 0, 23, 23, 78882),
 };
 
-describe("AppService", () => {
-  let service: AppService;
+describe("ExtractionService", () => {
+  let service: ExtractionService;
   let portalDeComprasPublicas: PortalDeComprasPublicasProvider;
 
   let mockedKnex: {
@@ -71,11 +71,11 @@ describe("AppService", () => {
             merge: jest.fn(async () => {}),
           },
         },
-        AppService,
+        ExtractionService,
       ],
     }).compile();
 
-    service = moduleRef.get(AppService);
+    service = moduleRef.get(ExtractionService);
     portalDeComprasPublicas = moduleRef.get(PortalDeComprasPublicasProvider);
     mockedKnex = moduleRef.get(KnexProvider);
   });
