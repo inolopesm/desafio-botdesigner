@@ -9,17 +9,15 @@ export class AppController {
   @UseGuards(ApiKeyGuard)
   @Get("extraction/force")
   async forceExtraction() {
-    if (!this.service.running) {
-      await this.service.extract();
-    }
-
-    return { running: this.service.running };
+    const running = this.service.getRunning();
+    if (!running) void this.service.extract();
+    return { requested: !running };
   }
 
   @UseGuards(ApiKeyGuard)
   @Get("extraction/status")
   async getExtractionStatus() {
-    const { running } = this.service;
+    const running = this.service.getRunning();
     return { running };
   }
 
