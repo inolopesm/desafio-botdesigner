@@ -8,9 +8,9 @@ import { type Processo } from "./processo.entity";
 export class AppService {
   private static formatDate(date: Date) {
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}/${month}/${day}T03:00:00.000Z`;
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}T03:00:00.000Z`;
   }
 
   private running = false;
