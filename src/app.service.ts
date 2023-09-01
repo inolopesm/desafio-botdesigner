@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
-import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.provider";
-import { KnexProvider } from "./knex.provider";
+import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas";
+import { KnexProvider } from "./knex/knex.provider";
 import { type Processo } from "./processo.entity";
 
 @Injectable()

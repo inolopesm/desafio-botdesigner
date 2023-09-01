@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing";
 import { AppService } from "./app.service";
-import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.provider";
-import { KnexProvider } from "./knex.provider";
+import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas";
+import { KnexProvider } from "./knex/knex.provider";
 
 const sleep = async (ms: number) => {
   await new Promise<void>((resolve) => setTimeout(resolve, ms));
