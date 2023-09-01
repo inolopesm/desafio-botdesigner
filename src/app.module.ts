@@ -9,17 +9,6 @@ import { KnexProvider } from "./knex.provider";
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), ScheduleModule.forRoot()],
   controllers: [AppController],
-  providers: [
-    {
-      provide: PortalDeComprasPublicasProvider,
-      useValue: new PortalDeComprasPublicasProvider(async (url) => {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data;
-      }),
-    },
-    KnexProvider,
-    AppService,
-  ],
+  providers: [PortalDeComprasPublicasProvider, KnexProvider, AppService],
 })
 export class AppModule {}

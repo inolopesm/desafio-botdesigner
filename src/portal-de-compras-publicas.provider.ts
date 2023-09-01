@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
+import { request } from "undici";
 
 @Injectable()
 export class PortalDeComprasPublicasProvider {
-  constructor(private readonly fetcher: (url: string) => any) {}
-
   async findProcessosByDataBetween(dataInicial: string, dataFinal: string) {
     if (dataInicial >= dataFinal) {
       throw new Error("dataInicial must be before dataFinal");
@@ -23,7 +22,8 @@ export class PortalDeComprasPublicasProvider {
 
     do {
       url.searchParams.set("pagina", i.toString());
-      const data = await this.fetcher(url.toString());
+      const response = await request(url.toString());
+      const data: any = await response.body.json();
 
       if (max === 0) {
         max = data.pageCount;

@@ -24,7 +24,8 @@
     "@nestjs/schedule": "^3.0.3",
     "knex": "^2.5.1",
     "pg": "^8.11.3",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "undici": "^5.23.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",

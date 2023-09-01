@@ -1,22 +1,23 @@
 import { Test } from "@nestjs/testing";
 import { PortalDeComprasPublicasProvider } from "./portal-de-compras-publicas.provider";
 
+jest.mock("undici", () => ({
+  request: async (url: string) => ({
+    body: {
+      json: async () => ({ pageCount: 3, result: [url] }),
+    },
+  }),
+}));
+
 describe("PortalDeComprasPublicasProvider", () => {
   let provider: PortalDeComprasPublicasProvider;
-  let fetcher: (url: string) => any;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [
-        {
-          provide: PortalDeComprasPublicasProvider,
-          useFactory: () => new PortalDeComprasPublicasProvider(fetcher),
-        },
-      ],
+      providers: [PortalDeComprasPublicasProvider],
     }).compile();
 
     provider = moduleRef.get(PortalDeComprasPublicasProvider);
-    fetcher = jest.fn((url) => ({ pageCount: 3, result: [url] }));
   });
 
   describe("findProcessosByDataBetween", () => {
