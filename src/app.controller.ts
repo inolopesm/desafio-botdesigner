@@ -2,7 +2,7 @@ import { Controller, Get, UseGuards } from "@nestjs/common";
 import { ApiKeyGuard } from "./api-key.guard";
 import { AppService } from "./app.service";
 
-@Controller()
+@Controller({ version: "1" })
 export class AppController {
   constructor(private readonly service: AppService) {}
 
