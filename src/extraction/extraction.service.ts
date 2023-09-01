@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { PortalDeComprasPublicasProvider } from "../portal-de-compras-publicas";
 import { KnexProvider } from "../knex";
@@ -14,6 +14,7 @@ export class ExtractionService {
   }
 
   private running = false;
+  private readonly logger = new Logger(ExtractionService.name);
 
   constructor(
     private readonly portalDeComprasPublicas: PortalDeComprasPublicasProvider,
@@ -57,6 +58,8 @@ export class ExtractionService {
         .insert(data)
         .onConflict("codigoLicitacao")
         .merge();
+    } catch (error) {
+      this.logger.error(String(error));
     } finally {
       this.running = false;
     }

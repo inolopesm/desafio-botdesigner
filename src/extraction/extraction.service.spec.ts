@@ -137,5 +137,21 @@ describe("ExtractionService", () => {
       expect(mockedKnex.onConflict).toHaveBeenCalledWith("codigoLicitacao");
       expect(mockedKnex.merge).toHaveBeenCalledTimes(1);
     });
+
+    it("should log error when throws", async () => {
+      const error = new Error("unexpected error");
+
+      jest
+        .spyOn(portalDeComprasPublicas, "findProcessosByDataBetween")
+        .mockRejectedValue(error);
+
+      const logger = Reflect.get(service, "logger");
+      const errorSpy = jest.spyOn(logger, "error").mockImplementation(() => {});
+
+      await service.extract();
+
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      expect(errorSpy).toHaveBeenCalledWith(String(error));
+    });
   });
 });
