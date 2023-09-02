@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { request } from "undici";
 
+// eslint-disable-next-line @typescript-eslint/promise-function-async, promise/param-names
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 @Injectable()
 export class PortalDeComprasPublicasProvider {
   async findProcessosByDataBetween(dataInicial: string, dataFinal: string) {
@@ -19,11 +22,41 @@ export class PortalDeComprasPublicasProvider {
     let i = 1;
     let max = 0;
     const result = [];
+    let tries = 0;
 
     do {
       url.searchParams.set("pagina", i.toString());
       const response = await request(url.toString());
+      const contentType = response.headers["content-type"];
+
+      if (contentType === undefined) {
+        if (tries === 3) throw new Error("max tries reached");
+        tries += 1;
+        await sleep(500);
+        continue;
+      }
+
+      if (typeof contentType !== "string") {
+        if (tries === 3) throw new Error("max tries reached");
+        tries += 1;
+        await sleep(500);
+        continue;
+      }
+
+      if (!contentType.includes("json")) {
+        if (tries === 3) throw new Error("max tries reached");
+        tries += 1;
+        await sleep(500);
+        continue;
+      }
       const data: any = await response.body.json();
+
+      if (data.pageCount === undefined) {
+        if (tries === 3) throw new Error("max tries reached");
+        tries += 1;
+        await sleep(500);
+        continue;
+      }
 
       if (max === 0) {
         max = data.pageCount;
@@ -31,7 +64,74 @@ export class PortalDeComprasPublicasProvider {
 
       result.push(...data.result);
 
+      tries = 0;
       i = i + 1;
+      await sleep(500);
+    } while (i <= max);
+
+    return result;
+  }
+
+  async findItemsByCodigoLicitacao(codigoLicitacao: number): Promise<any[]> {
+    const baseUrl = "https://compras.api.portaldecompraspublicas.com.br";
+    const url = new URL(`/v2/licitacao/${codigoLicitacao}/itens`, baseUrl);
+
+    url.searchParams.set("filtro", "");
+    url.searchParams.set("pagina", "1");
+
+    let i = 1;
+    let max = 0;
+    const result = [];
+    let tries = 0;
+
+    do {
+      url.searchParams.set("pagina", i.toString());
+      const response = await request(url.toString());
+      const contentType = response.headers["content-type"];
+
+      if (contentType === undefined) {
+        if (tries === 3) throw new Error("max tries reached");
+        tries += 1;
+        await sleep(500);
+        continue;
+      }
+
+      if (typeof contentType !== "string") {
+        if (tries === 3) throw new Error("max tries reached");
+        tries += 1;
+        await sleep(500);
+        continue;
+      }
+
+      if (!contentType.includes("json")) {
+        if (tries === 3) throw new Error("max tries reached");
+        tries += 1;
+        await sleep(500);
+        continue;
+      }
+
+      const data: any = await response.body.json();
+
+      if (data.isLote === true) {
+        return [];
+      }
+
+      if (data.itens === undefined) {
+        if (tries === 3) throw new Error("max tries reached");
+        tries += 1;
+        await sleep(500);
+        continue;
+      }
+
+      if (max === 0) {
+        max = data.itens.pageCount;
+      }
+
+      result.push(...data.itens.result);
+
+      tries = 0;
+      i = i + 1;
+      await sleep(500);
     } while (i <= max);
 
     return result;
