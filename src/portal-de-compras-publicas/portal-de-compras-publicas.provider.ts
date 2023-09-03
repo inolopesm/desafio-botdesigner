@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { request } from "undici";
+import { request, errors, type Dispatcher } from "undici";
 import { Time } from "../time.util";
 
 @Injectable()
@@ -24,7 +24,22 @@ export class PortalDeComprasPublicasProvider {
 
     do {
       url.searchParams.set("pagina", i.toString());
-      const response = await request(url.toString());
+
+      let response: Dispatcher.ResponseData;
+
+      try {
+        response = await request(url.toString());
+      } catch (error) {
+        if (error.code instanceof errors.ConnectTimeoutError) {
+          if (tries === 3) throw new Error("max tries reached");
+          tries += 1;
+          await Time.sleep(500);
+          continue;
+        }
+
+        throw error;
+      }
+
       const contentType = response.headers["content-type"];
 
       if (contentType === undefined) {
@@ -84,7 +99,21 @@ export class PortalDeComprasPublicasProvider {
 
     do {
       url.searchParams.set("pagina", i.toString());
-      const response = await request(url.toString());
+      let response: Dispatcher.ResponseData;
+
+      try {
+        response = await request(url.toString());
+      } catch (error) {
+        if (error.code instanceof errors.ConnectTimeoutError) {
+          if (tries === 3) throw new Error("max tries reached");
+          tries += 1;
+          await Time.sleep(500);
+          continue;
+        }
+
+        throw error;
+      }
+
       const contentType = response.headers["content-type"];
 
       if (contentType === undefined) {
