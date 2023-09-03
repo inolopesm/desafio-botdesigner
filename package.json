@@ -14,7 +14,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect -r ts-node/register node_modules/.bin/jest --runInBand",
+    "knex": "knex --knexfile knexfile.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.2.3",
