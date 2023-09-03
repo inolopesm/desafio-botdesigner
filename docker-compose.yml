@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:15.4-bookworm
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=botdesigner
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  app:
+    build:
+      context: .
+      target: base
+    environment:
+      - API_KEY=231e3ca8
+      - POSTGRES_URL=postgres://postgres:docker@postgres/botdesigner
+    ports:
+      - 3000:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./src:/home/node/app/src
+      - ./migrations:/home/node/app/migrations
+    command: sh -c "npm run knex -- migrate:latest && npm run start:dev -- --preserveWatchOutput"
