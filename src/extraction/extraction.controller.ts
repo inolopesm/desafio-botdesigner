@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { ApiKeyGuard } from "../api-key.guard";
 import { ExtractionService } from "./extraction.service";
 
@@ -7,7 +7,7 @@ export class ExtractionController {
   constructor(private readonly service: ExtractionService) {}
 
   @UseGuards(ApiKeyGuard)
-  @Get("extraction/force")
+  @Post("extraction/force")
   async forceExtraction() {
     const running = this.service.getRunning();
     if (!running) void this.service.extract();
