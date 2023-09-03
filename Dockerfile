@@ -9,6 +9,7 @@ RUN npm ci
 COPY ./nest-cli.json ./
 COPY ./tsconfig*.json ./
 COPY ./knexfile.js ./
+EXPOSE 3000
 
 
 FROM base AS production
