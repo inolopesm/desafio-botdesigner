@@ -57,8 +57,6 @@ export class ExtractionService {
             dataHoraInicioLances: processoResult.dataHoraInicioLances,
           };
 
-          console.log(JSON.stringify(processoData));
-
           const processoInserteds = await trx<Processo>("Processo")
             .insert(processoData)
             .onConflict("codigoLicitacao")
@@ -86,8 +84,6 @@ export class ExtractionService {
                 participacaoCodigo: itemResult.participacao.codigo,
                 codigo: itemResult.codigo,
               };
-
-              console.log(JSON.stringify(itemData));
 
               await trx<ProcessoItem>("ProcessoItem")
                 .insert(itemData)
