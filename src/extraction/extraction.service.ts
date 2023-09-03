@@ -84,15 +84,6 @@ export class ExtractionService {
         )
       ).flat();
 
-      // for (const itemData of itemsData) {
-      //   console.log(itemData);
-      //   await this.knex
-      //     .client<ProcessoItem>("ProcessoItem")
-      //     .insert(itemData)
-      //     .onConflict(["processoId", "indice"])
-      //     .merge();
-      // }
-
       await this.knex
         .client<ProcessoItem>("ProcessoItem")
         .insert(itemsData)

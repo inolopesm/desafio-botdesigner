@@ -1,8 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { request } from "undici";
-
-// eslint-disable-next-line @typescript-eslint/promise-function-async, promise/param-names
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+import { Time } from "../time.util";
 
 @Injectable()
 export class PortalDeComprasPublicasProvider {
@@ -32,21 +30,21 @@ export class PortalDeComprasPublicasProvider {
       if (contentType === undefined) {
         if (tries === 3) throw new Error("max tries reached");
         tries += 1;
-        await sleep(500);
+        await Time.sleep(500);
         continue;
       }
 
       if (typeof contentType !== "string") {
         if (tries === 3) throw new Error("max tries reached");
         tries += 1;
-        await sleep(500);
+        await Time.sleep(500);
         continue;
       }
 
       if (!contentType.includes("json")) {
         if (tries === 3) throw new Error("max tries reached");
         tries += 1;
-        await sleep(500);
+        await Time.sleep(500);
         continue;
       }
       const data: any = await response.body.json();
@@ -54,7 +52,7 @@ export class PortalDeComprasPublicasProvider {
       if (data.pageCount === undefined) {
         if (tries === 3) throw new Error("max tries reached");
         tries += 1;
-        await sleep(500);
+        await Time.sleep(500);
         continue;
       }
 
@@ -66,7 +64,7 @@ export class PortalDeComprasPublicasProvider {
 
       tries = 0;
       i = i + 1;
-      await sleep(500);
+      await Time.sleep(500);
     } while (i <= max);
 
     return result;
@@ -92,21 +90,21 @@ export class PortalDeComprasPublicasProvider {
       if (contentType === undefined) {
         if (tries === 3) throw new Error("max tries reached");
         tries += 1;
-        await sleep(500);
+        await Time.sleep(500);
         continue;
       }
 
       if (typeof contentType !== "string") {
         if (tries === 3) throw new Error("max tries reached");
         tries += 1;
-        await sleep(500);
+        await Time.sleep(500);
         continue;
       }
 
       if (!contentType.includes("json")) {
         if (tries === 3) throw new Error("max tries reached");
         tries += 1;
-        await sleep(500);
+        await Time.sleep(500);
         continue;
       }
 
@@ -119,7 +117,7 @@ export class PortalDeComprasPublicasProvider {
       if (data.itens === undefined) {
         if (tries === 3) throw new Error("max tries reached");
         tries += 1;
-        await sleep(500);
+        await Time.sleep(500);
         continue;
       }
 
@@ -131,7 +129,7 @@ export class PortalDeComprasPublicasProvider {
 
       tries = 0;
       i = i + 1;
-      await sleep(500);
+      await Time.sleep(500);
     } while (i <= max);
 
     return result;
